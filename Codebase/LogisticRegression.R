@@ -13,8 +13,19 @@ diff <- (CarSpecs_model$Fuel_Economy - min(CarSpecs_model$Fuel_Economy))
 minmax <- (max(CarSpecs_model$Fuel_Economy) - min(CarSpecs_model$Fuel_Economy))
 CarSpecs_model$Fuel_Economy <- diff/minmax
 
-View(CarSpecs_model)
+# Previous runs indicated NA data still exists
+na_counts_base <- colSums(is.na(CarSpecs_model))
+na_counts_base
 
+# Replacing data with the average column value
+CarSpecs_model$curb_weight_kg <- replace(CarSpecs_model$curb_weight_kg, is.na(CarSpecs_model$curb_weight_kg), mean(CarSpecs_model$curb_weight_kg, na.rm=TRUE))
+CarSpecs_model$maximum_torque_n_m <- replace(CarSpecs_model$maximum_torque_n_m, is.na(CarSpecs_model$maximum_torque_n_m), mean(CarSpecs_model$maximum_torque_n_m, na.rm=TRUE))
+CarSpecs_model$fuel_grade <- replace(CarSpecs_model$fuel_grade, is.na(CarSpecs_model$fuel_grade), mean(CarSpecs_model$fuel_grade, na.rm=TRUE))
+# This suggest the possibility of revisiting how the data was cleaned
+# If the model is performing poorly, more columns can be added and cleaned in this manner
+
+str(CarSpecs_model)
+View(CarSpecs_model)
 
 # ------------------------------------------------------------------------------------------------------------
 
@@ -89,4 +100,6 @@ ggplot(CarSpecs_model, aes(x=Body_type + number_of_seats + length_mm + curb_weig
                              engine_placement + engine_hp + drive_wheels + number_of_gears +
                              transmission + fuel_grade, y=Fuel_Economy)) + 
   geom_point() +
-  geom_smooth(method = "glm", method.args = list(family = "quasibinomial"), se = FALSE) 
+  geom_smooth(method = "glm", method.args = list(family = "quasibinomial"), se = FALSE) +
+  ggtitle("Logistic Regression Model of Fuel Economy vs. All Variables") +
+  xlab("All Specifications")
