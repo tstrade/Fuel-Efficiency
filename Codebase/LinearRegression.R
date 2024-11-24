@@ -58,3 +58,21 @@ ggplot(CarSpecs_model, aes(x=(length_mm + curb_weight_kg + maximum_torque_n_m + 
   geom_smooth(method='lm') +
   ggtitle("Linear Regression: Fuel Economy vs. Specs")
 
+# ------------------------------------------------------------------------------------------------------------
+
+model <- lm(Fuel_Economy~Body_type + number_of_seats + length_mm + curb_weight_kg +
+              maximum_torque_n_m + injection_type + cylinder_layout + number_of_cylinders +
+              compression_ratio + engine_type + valves_per_cylinder + boost_type +
+              engine_placement + engine_hp + drive_wheels + number_of_gears +
+              transmission + fuel_grade, CarSpecs_model)
+
+summary(model)
+
+ggplot(CarSpecs_model, aes(x=Body_type + number_of_seats + length_mm + curb_weight_kg +
+                             maximum_torque_n_m + injection_type + cylinder_layout + number_of_cylinders +
+                             compression_ratio + engine_type + valves_per_cylinder + boost_type +
+                             engine_placement + engine_hp + drive_wheels + number_of_gears +
+                             transmission + fuel_grade, CarSpecs_model, y=Fuel_Economy)) +
+  geom_point() + 
+  geom_smooth(method='lm') +
+  ggtitle("Linear Regression: Fuel Economy vs. Specs")
