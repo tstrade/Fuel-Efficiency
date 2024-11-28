@@ -1,7 +1,6 @@
 library(randomForest)
 library(dplyr)
 library(ggplot2)
-library(rfviz)
 
 # Specify the path to cleaned data
 df <- read.csv("~/DataScience/Fuel-Efficiency/DataSources/Final_Model_Data_Num_Only.csv")
@@ -44,6 +43,7 @@ which.min(model$mse)
 
 sqrt(model$mse[which.min(model$mse)])
 # RMSE = 0.05581966
+
 
 # Test the model
 prediction <- predict(model, newdata = test)
@@ -115,6 +115,8 @@ which.min(tuned_model$mse)
 sqrt(tuned_model$mse[which.min(tuned_model$mse)])
 # RMSE = 0.05532445
 
+save(tuned_model, file="RFRTunedModel.RData")
+
 # Test the model
 tuned_prediction <- predict(tuned_model, newdata = test)
 table(tuned_prediction, test$Fuel_Economy)
@@ -172,9 +174,26 @@ train_norm <- rnorm(46374, mean = mean(train$Fuel_Economy, na.rm = TRUE),
                     sd = sd(train$Fuel_Economy, na.rm = TRUE))
 test_norm <- rnorm(11593, mean = mean(test$Fuel_Economy, na.rm = TRUE),
                    sd = sd(test$Fuel_Economy, na.rm = TRUE))
+# results <- read.csv("~/Fuel_Economy_RFR_Results.csv")
 init_rslts_norm <- rnorm(11593, mean = mean(results$pred, na.rm = TRUE),
                    sd = sd(results$pred, na.rm = TRUE))
+# tuned_results <- read.csv("~/Fuel_Economy_RFR_Tuned_Results.csv")
 tuned_rslts_norm <- rnorm(11593, mean = mean(tuned_results$pred, na.rm = TRUE),
                           sd = sd(tuned_results$pred, na.rm = TRUE))
+df$Norm <- df_norm
+train$Norm <- train_norm
+test$Norm <- test_norm
+results$Norm <- init_rslts_norm
+tuned_results$Norm <- tuned_rslts_norm
+
+
+ggplot() +
+  geom_histogram(data = df, aes(x = Norm), fill = "skyblue", alpha = 0.3) +
+  geom_histogram(data = train, aes(x = Norm), fill = "lightgreen", alpha = 0.3) +
+  geom_histogram(data = test, aes(x = Norm), fill = "pink", alpha = 0.8) +
+  geom_histogram(data = results, aes(x = Norm), fill = "orange", alpha = 0.8) +
+  geom_histogram(data = tuned_results, aes(x = Norm), fill = "purple", alpha = 0.5) +
+  labs(color = "Datasets") + ggtitle("Normal Distribution of Fuel Economy Across Datasets")
+
 
 
