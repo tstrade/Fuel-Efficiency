@@ -2,7 +2,7 @@ library(ggplot2)
 library(dplyr)
 
 # Specify the path to Car Specification Dataset file
-path_model <- "~/DataScience/Fuel-Efficiency/DataSources/Model_CarSpecs_1945to2020.csv"
+path_model <- "~/DataScience/Fuel-Efficiency/DataSources/Data Used/Model_CarSpecs_1945to2020.csv"
 
 # Read CSV file into a data frame
 CarSpecs_model <- read.csv(path_model)
